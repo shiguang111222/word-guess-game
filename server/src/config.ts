@@ -3,17 +3,20 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+// Only load .env in development
+const isProd = process.env.NODE_ENV === 'production';
+if (!isProd) {
+  dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+}
 
 export const config = {
   port: parseInt(process.env.PORT || '3001', 10),
   clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  isProd,
 
-  // DeepSeek API (OpenAI-compatible)
   deepseekApiKey: process.env.DEEPSEEK_API_KEY || '',
   deepseekBaseUrl: process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com',
-
-  // 通义万相 (Alibaba Cloud DashScope)
   dashscopeApiKey: process.env.DASHSCOPE_API_KEY || '',
 
   game: {
